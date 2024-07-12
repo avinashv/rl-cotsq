@@ -35,7 +35,8 @@ running from 9 July 2024 till 27 August 2024.
 <details>
 <summary>9 July 2024 - Setup, drawing an @, and moving around</summary>
 
-TBC
+ - I have some experience with the [original tutorial](http://bfnightly.bracketproductions.com/rustbook/) that Herbert Wolverson made before this book. I find that so far, the book is easier for me to grasp as someone still relatively inexperienced with Rust.
+ - The fact that I know that ECS is incoming means I already know that a major refactor is incoming which is frustration that I am going to face--at this point in the book I'd rather have just dealt with `legion` being implemented up-front.
 
 </details>
 
