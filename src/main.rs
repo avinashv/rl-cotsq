@@ -1,21 +1,21 @@
-mod map;
-mod map_builder;
 mod camera;
 mod components;
+mod map;
+mod map_builder;
 mod spawner;
 mod systems;
 
 mod prelude {
     // External crates
     pub use bracket_lib::prelude::*;
-    pub use legion::*;
     pub use legion::world::SubWorld;
+    pub use legion::*;
 
     // Internal modules
-    pub use crate::map::*;
-    pub use crate::map_builder::*;
     pub use crate::camera::*;
     pub use crate::components::*;
+    pub use crate::map::*;
+    pub use crate::map_builder::*;
     pub use crate::spawner::*;
     pub use crate::systems::*;
 

@@ -28,32 +28,6 @@ impl Map {
         }
     }
 
-    /// Render the map to the screen
-    pub fn render(&self, ctx: &mut BTerm, camera: &Camera) {
-        // Render to the background layer
-        ctx.set_active_console(0);
-
-        // Go through x, y
-        for y in camera.top_y..camera.bottom_y {
-            for x in camera.left_x..camera.right_x {
-                if self.in_bounds(Point::new(x, y)) {
-                    // Determine the index
-                    let idx = map_idx(x, y);
-
-                    // Check if its Floor or Wall and draw it appropriately
-                    match self.tiles[idx] {
-                        TileType::Floor => {
-                            ctx.set(x - camera.left_x, y - camera.top_y, RGBA::from_u8(76, 76, 76, 255), BLACK, to_cp437('.'));
-                        }
-                        TileType::Wall => {
-                            ctx.set(x - camera.left_x, y - camera.top_y, WHITE, BLACK, to_cp437('#'));
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     /// Check whether a Point is within the Map
     pub fn in_bounds(&self, point: Point) -> bool {
         point.x >= 0 && point.x < SCREEN_WIDTH && point.y >= 0 && point.y < SCREEN_HEIGHT

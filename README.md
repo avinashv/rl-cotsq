@@ -2,14 +2,14 @@
 
 A turn-based, procedurally-generated roguelike.
 
-Built using Rust, `bracket-lib`, `legion`, and _Hands-on Rust_ by Herbert Wolverson.
+Built using Rust, `bracket-lib`, `legion`, and _Hands-on Rust_ by Herbert Wolverson as a part of [r/roguelikedev](https://old.reddit.com/r/roguelikedev)'s annual event.
 
 ### Table of Contents
 
 - [RoguelikeDev Does The Complete Roguelike Tutorial](#roguelikedev-does-the-complete-roguelike-tutorial)
 - Weekly Implementation Notes
-	- [Week 1](#week-1)
-	- [Week 2](#week-2)
+	- [Week 1](#week-1) ✅
+	- [Week 2](#week-2) ✅
 	- [Week 3](#week-3)
 	- [Week 4](#week-4)
 	- [Week 5](#week-5)
@@ -27,10 +27,12 @@ Built using Rust, `bracket-lib`, `legion`, and _Hands-on Rust_ by Herbert Wolver
 ![RoguelikeDev 2024 Logo](./assets/roguelikedev-2024.png)
 
 This repository is participating in the 2024 edition of
-the [RoguelikeDev event](https://www.reddit.com/r/roguelikedev/comments/1dt8bqm/roguelikedev_does_the_complete_roguelike_tutorial/),
-running from 9 July 2024 till 27 August 2024.
+the [RoguelikeDev event](https://old.reddit.com/r/roguelikedev/comments/1dt8bqm/roguelikedev_does_the_complete_roguelike_tutorial/),
+running from 9 July 2024 till 27 August 2024. The event is structured to follow the [canonical Python tutorial](https://rogueliketutorials.com/tutorials/tcod/v2/). _Hands-on Rust_ only loosely follows the structure of the tutorial, so the steps may be a little out of order.
 
-### [Week 1](https://www.reddit.com/r/roguelikedev/comments/1dz7bbg/roguelikedev_does_the_complete_roguelike_tutorial/)
+### [Week 1](https://old.reddit.com/r/roguelikedev/comments/1dz7bbg/roguelikedev_does_the_complete_roguelike_tutorial/)
+
+✅ [Progress comment](https://old.reddit.com/r/roguelikedev/comments/1dz7bbg/roguelikedev_does_the_complete_roguelike_tutorial/lcvcfbm/) | [Milestone commit](https://github.com/avinashv/rl-cotsq/commit/87ebf7c68887df61bb9c8ef689c4b51ced5b0350)
 
 <details>
 <summary>9 July 2024 - Setup, drawing an @, and moving around</summary>
@@ -42,10 +44,16 @@ running from 9 July 2024 till 27 August 2024.
 
 ### Week 2
 
+Progress comment | [Milestone commit](https://github.com/avinashv/rl-cotsq/commit/d689405efaa4a4e0e579372c5e9d77839804e4e4)
+
 <details>
 <summary>16 July 2024 - The object system and generating your first map</summary>
 
-TBC
+ - Started work on this a bit early.
+ - Map implementation was the boring rooms-and-corridors method that I really dislike, because it results in very unnatural structure generation. Reading ahead, I can see there are some more interesting approaches such as cellular automata later on, so I am not jumping ahead for now.
+ - The implementation of a camera is quite straightforward.
+ - Not following the original Python tutorial here at all, instead the book uses `legion` to provide ECS.
+   - Injecting resources into the `World` is clever, and the way that the camera and map become a resource that a query result can interact with is very nice.
 
 </details>
 
@@ -79,7 +87,7 @@ TBC
 ### Week 6
 
 <details>
-<summary>13 August 2024 - <del>Save/load and leveling up</del> Item usage</summary>
+<summary>13 August 2024 - Save/load and leveling up</summary>
 
 TBC
 
@@ -125,8 +133,8 @@ TBD.
 
 <details>
 
-- [ ] Player can walk around
-- [ ] Create a basic procedural dungeon map
+- [x] Player can walk around
+- [x] Create a basic procedural dungeon map
 - [ ] Player has field-of-view
 - [ ] Spawn monsters
 - [ ] Players can fight monsters
@@ -140,7 +148,7 @@ TBD.
 
 <details>
 
-- [ ] Camera system
+- [x] Camera system
 - [ ] Bitset walls
 - [ ] Monsters have field-of-view
 - [ ] Messaging log
