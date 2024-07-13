@@ -29,19 +29,25 @@ impl Map {
     }
 
     /// Render the map to the screen
-    pub fn render(&self, ctx: &mut BTerm) {
-        // Iterate through the x, y coordinates
-        for y in 0..SCREEN_HEIGHT {
-            for x in 0..SCREEN_WIDTH {
-                let idx = map_idx(x, y);
+    pub fn render(&self, ctx: &mut BTerm, camera: &Camera) {
+        // Render to the background layer
+        ctx.set_active_console(0);
 
-                // Match the tile against the possible values and render the correct glyph
-                match self.tiles[idx] {
-                    TileType::Floor => {
-                        ctx.set(x, y, YELLOW, BLACK, to_cp437('.'));
-                    }
-                    TileType::Wall => {
-                        ctx.set(x, y, GREEN, BLACK, to_cp437('#'));
+        // Go through x, y
+        for y in camera.top_y..camera.bottom_y {
+            for x in camera.left_x..camera.right_x {
+                if self.in_bounds(Point::new(x, y)) {
+                    // Determine the index
+                    let idx = map_idx(x, y);
+
+                    // Check if its Floor or Wall and draw it appropriately
+                    match self.tiles[idx] {
+                        TileType::Floor => {
+                            ctx.set(x - camera.left_x, y - camera.top_y, RGBA::from_u8(76, 76, 76, 255), BLACK, to_cp437('.'));
+                        }
+                        TileType::Wall => {
+                            ctx.set(x - camera.left_x, y - camera.top_y, WHITE, BLACK, to_cp437('#'));
+                        }
                     }
                 }
             }

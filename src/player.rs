@@ -11,18 +11,22 @@ impl Player {
     }
 
     /// Render the player to the screen
-    pub fn render(&self, ctx: &mut BTerm) {
+    pub fn render(&self, ctx: &mut BTerm, camera: &Camera) {
+        // Render to the foreground layer
+        ctx.set_active_console(1);
+
+        // Draw the player
         ctx.set(
-            self.position.x,
-            self.position.y,
-            WHITE,
+            self.position.x - camera.left_x,
+            self.position.y - camera.top_y,
+            RGBA::from_u8(242, 240, 103, 255),
             BLACK,
             to_cp437('@'),
-        )
+        );
     }
 
     /// Handle player input
-    pub fn update(&mut self, ctx: &mut BTerm, map: &Map) {
+    pub fn update(&mut self, ctx: &mut BTerm, map: &Map, camera: &mut Camera) {
         // Check input events to create direction delta
         if let Some(key) = ctx.key {
             let delta = match key {
@@ -37,6 +41,7 @@ impl Player {
             let new_position = self.position + delta;
             if map.can_enter_tile(new_position) {
                 self.position = new_position;
+                camera.on_player_move(new_position);
             }
         }
     }
