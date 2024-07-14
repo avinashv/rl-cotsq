@@ -12,17 +12,17 @@ pub fn player_input(
     if let Some(key) = key {
         // Create a new Point with the delta of movement, or zero
         let delta = match key {
-            // Orthogonal directions (arrow and vi keys)
-            VirtualKeyCode::Left | VirtualKeyCode::H => Point::new(-1, 0),
-            VirtualKeyCode::Right | VirtualKeyCode::L => Point::new(1, 0),
-            VirtualKeyCode::Up | VirtualKeyCode::K => Point::new(0, -1),
-            VirtualKeyCode::Down | VirtualKeyCode::J => Point::new(0, 1),
+            // Orthogonal directions (arrow, vi, and wasd keys)
+            VirtualKeyCode::Left | VirtualKeyCode::H | VirtualKeyCode::A => Point::new(-1, 0),
+            VirtualKeyCode::Right | VirtualKeyCode::L | VirtualKeyCode::D => Point::new(1, 0),
+            VirtualKeyCode::Up | VirtualKeyCode::K | VirtualKeyCode::W => Point::new(0, -1),
+            VirtualKeyCode::Down | VirtualKeyCode::J | VirtualKeyCode::S => Point::new(0, 1),
 
-            // Diagonal directors (vi keys)
-            VirtualKeyCode::Y => Point::new(-1, -1),
-            VirtualKeyCode::U => Point::new(1, -1),
-            VirtualKeyCode::N => Point::new(1, 1),
-            VirtualKeyCode::B => Point::new(-1, 1),
+            // Diagonal directors (vi and wasd keys)
+            VirtualKeyCode::Y | VirtualKeyCode::Q => Point::new(-1, -1),
+            VirtualKeyCode::U | VirtualKeyCode::E => Point::new(1, -1),
+            VirtualKeyCode::N | VirtualKeyCode::C => Point::new(1, 1),
+            VirtualKeyCode::B | VirtualKeyCode::Z => Point::new(-1, 1),
 
             // No key pressed
             _ => Point::zero(),

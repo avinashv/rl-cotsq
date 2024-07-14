@@ -1,0 +1,24 @@
+// NightLion v1 Theme
+BACKGROUND = ColorPair::new(RGBA::from_u8(0, 0, 0, 255), BLACK); // #000000
+GRAY = ColorPair::new(RGBA::from_u8(76, 76, 76, 255), BLACK); // #4c4c4c
+BLUE = ColorPair::new(RGBA::from_u8(38, 106, 215, 255), BLACK); // #266ad7
+BRIGHT_BLACK = ColorPair::new(RGBA::from_u8(84, 84, 84, 255), BLACK); // #545454
+BRIGHT_BLUE = ColorPair::new(RGBA::from_u8(85, 85, 255, 255), BLACK); // #5555ff
+BRIGHT_CYAN = ColorPair::new(RGBA::from_u8(85, 255, 255, 255), BLACK); // #55ffff
+BRIGHT_GREEN = ColorPair::new(RGBA::from_u8(85, 255, 85, 255), BLACK); // #55ff55
+BRIGHT_MAGENTA = ColorPair::new(RGBA::from_u8(255, 85, 255, 255), BLACK); // #ff55ff
+BRIGHT_RED = ColorPair::new(RGBA::from_u8(255, 85, 85, 255), BLACK); // #ff5555
+BRIGHT_WHITE = ColorPair::new(RGBA::from_u8(255, 255, 255, 255), BLACK); // #ffffff
+BRIGHT_YELLOW = ColorPair::new(RGBA::from_u8(255, 255, 85, 255), BLACK); // #ffff55
+CYAN = ColorPair::new(RGBA::from_u8(0, 217, 223, 255), BLACK); // #00d9df
+GREEN = ColorPair::new(RGBA::from_u8(94, 222, 143, 255), BLACK); // #5ede8f
+MAGENTA = ColorPair::new(RGBA::from_u8(187, 0, 187, 255), BLACK); // #bb00bb
+RED = ColorPair::new(RGBA::from_u8(187, 0, 0, 255), BLACK); // #bb0000
+WHITE = ColorPair::new(RGBA::from_u8(187, 187, 187, 255), BLACK); // #bbbbbb
+YELLOW = ColorPair::new(RGBA::from_u8(242, 240, 103, 255), BLACK); // #f2f067
+
+// Allocations
+Player = YELLOW
+Enemy = BRIGHT_RED
+Wall = WHITE
+Floor = GRAY

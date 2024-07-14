@@ -28,7 +28,7 @@ pub fn map_render(#[resource] map: &Map, #[resource] camera: &Camera) {
                         );
                     }
                     TileType::Wall => {
-                        draw_batch.set(pt - offset, ColorPair::new(WHITE, BLACK), to_cp437('#'));
+                        draw_batch.set(pt - offset, ColorPair::new(RGBA::from_u8(187, 187, 187, 255), BLACK), to_cp437('#'));
                     }
                 }
             }

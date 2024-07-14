@@ -11,7 +11,7 @@ mod prelude {
     pub use legion::world::SubWorld;
     pub use legion::*;
 
-    // Internal modules
+    // Internal modules (global namespace)
     pub use crate::camera::*;
     pub use crate::components::*;
     pub use crate::map::*;
@@ -47,7 +47,14 @@ impl State {
         // Set up RNG and MapBuilder
         let mut rng = RandomNumberGenerator::new();
         let map_builder = MapBuilder::new(&mut rng);
+
+        // Spawn entities
         spawn_player(&mut ecs, map_builder.player_start);
+        map_builder.rooms
+            .iter()
+            .skip(1)
+            .map(|r| r.center())
+            .for_each(|pos| spawn_monster(&mut ecs, &mut rng, pos));
 
         // Inject Map and Camera as resources into the ECS
         resources.insert(map_builder.map);

@@ -10,3 +10,7 @@ pub struct Render {
 /// Player component (tag)
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Player;
+
+/// Enemy component (tag)
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Enemy;
