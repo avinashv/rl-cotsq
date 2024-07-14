@@ -18,8 +18,8 @@ pub fn spawn_player(ecs: &mut World, pos: Point) {
 pub fn spawn_monster(ecs: &mut World, rng: &mut RandomNumberGenerator, pos: Point) {
     // Create a new monster entity
     ecs.push((
-        Enemy,  // Enemy tag
-        pos,    // Position component (Point)
+        Enemy, // Enemy tag
+        pos,   // Position component (Point)
         Render {
             // Render component
             color: ColorPair::new(RGBA::from_u8(255, 85, 85, 255), BLACK),
@@ -28,7 +28,7 @@ pub fn spawn_monster(ecs: &mut World, rng: &mut RandomNumberGenerator, pos: Poin
                 1 => to_cp437('O'),
                 2 => to_cp437('o'),
                 _ => to_cp437('g'),
-            }
+            },
         },
     ));
 }
