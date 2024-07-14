@@ -36,12 +36,12 @@ pub fn player_input(
             // Iterate through all results of the filtered query. Should really only be one!
             players.iter_mut(ecs).for_each(|pos| {
                 // * dereferences the position
-                let destination = *pos + delta;
+                let dest = *pos + delta;
 
                 // Only process the movement if it's valid
-                if map.can_enter_tile(destination) {
-                    *pos = destination;
-                    camera.on_player_move(destination);
+                if map.can_enter_tile(dest) {
+                    *pos = dest;
+                    camera.on_player_move(dest);
                 }
             });
         }

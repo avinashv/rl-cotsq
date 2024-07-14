@@ -58,7 +58,8 @@ impl State {
             .map(|r| r.center())
             .for_each(|pos| spawn_monster(&mut ecs, &mut rng, pos));
 
-        // Inject Map and Camera as resources into the ECS
+        // Inject RNG, Map, and Camera as resources into the ECS
+        resources.insert(rng);
         resources.insert(map_builder.map);
         resources.insert(Camera::new(map_builder.player_start));
 
