@@ -8,6 +8,7 @@ pub fn player_input(
     #[resource] map: &Map,
     #[resource] key: &Option<VirtualKeyCode>,
     #[resource] camera: &mut Camera,
+    #[resource] turn_state: &mut TurnState,
 ) {
     if let Some(key) = key {
         // Create a new Point with the delta of movement, or zero
@@ -40,8 +41,12 @@ pub fn player_input(
 
                 // Only process the movement if it's valid
                 if map.can_enter_tile(dest) {
+                    // * dereferences the position/turn state
                     *pos = dest;
                     camera.on_player_move(dest);
+
+                    // Player has for sure acted now, so change the TurnState
+                    *turn_state = TurnState::PlayerTurn;
                 }
             });
         }

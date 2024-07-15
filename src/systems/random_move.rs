@@ -1,7 +1,5 @@
 use crate::prelude::*;
 
-use crate::prelude::*;
-
 #[system]
 #[write_component(Point)]
 #[read_component(MovingRandomly)]
