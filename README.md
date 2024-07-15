@@ -66,6 +66,7 @@ Progress comment | [Milestone commit](https://github.com/avinashv/rl-cotsq/commi
  - The ECS system shines in this simple situation--enemies are just defined and placed and all the tying together of rendering is already done.
  - Again, I just get the feeling there is a lot of refactoring that is going to be done later and typing all of this redundant code feels like busy-work when I know there is going to be some instruction like, "delete it".
  - I like the way state is managed, and a different system scheduler for each state is very interesting.
+   - Once it is refactored into an intent-based system, **there is a bug**. `build_monster_scheduler()` doesn't call `collisions::collisions_system()` after the `movement::movement_system()` is called (as it is in the player's scheduler) and if you wait the monsters will eventually randomly find themselves on the player and in that move itself they should be destroyed. Currently they just sit on the player until a movement from the player is processed--and that movement has to be "wait".
 
 </details>
 

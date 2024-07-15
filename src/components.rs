@@ -18,3 +18,10 @@ pub struct Enemy;
 /// Moving Randomly component (tag)
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct MovingRandomly;
+
+/// WantsToMove component (intent)
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct WantsToMove {
+    pub entity: Entity,
+    pub destination: Point,
+}

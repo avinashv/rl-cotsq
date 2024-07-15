@@ -1,16 +1,19 @@
 use crate::prelude::*;
 
 #[system]
-#[write_component(Point)]
+#[read_component(Point)]
 #[read_component(Player)]
 pub fn player_input(
     ecs: &mut SubWorld,
-    #[resource] map: &Map,
+    commands: &mut CommandBuffer,
     #[resource] key: &Option<VirtualKeyCode>,
-    #[resource] camera: &mut Camera,
     #[resource] turn_state: &mut TurnState,
 ) {
-    if let Some(key) = key {
+    // Get all entities with a Point and filter for Player
+    let mut players = <(Entity, &Point)>::query().filter(component::<Player>());
+
+    // Check for key presses
+    if let Some(key) = *key {
         // Create a new Point with the delta of movement, or zero
         let delta = match key {
             // Orthogonal directions (arrow, vi, and wasd keys)
@@ -29,26 +32,26 @@ pub fn player_input(
             _ => Point::zero(),
         };
 
-        // If there was any change in position
-        if delta.x != 0 || delta.y != 0 {
-            // Get all entities with a Point and filter for Player
-            let mut players = <&mut Point>::query().filter(component::<Player>());
+        // Iterate through all results of the filtered query
+        // Should really only be one!
+        players.iter_mut(ecs).for_each(|(entity, pos)| {
+            // * dereferences the position
+            let destination = *pos + delta;
 
-            // Iterate through all results of the filtered query. Should really only be one!
-            players.iter_mut(ecs).for_each(|pos| {
-                // * dereferences the position
-                let dest = *pos + delta;
+            // Send command for WantsToMove
+            // Legion's `push` needs a tuple
+            commands.push((
+                (),
+                WantsToMove {
+                    // * dereferences the entity
+                    entity: *entity,
+                    destination,
+                },
+            ));
+        });
 
-                // Only process the movement if it's valid
-                if map.can_enter_tile(dest) {
-                    // * dereferences the position/turn state
-                    *pos = dest;
-                    camera.on_player_move(dest);
-
-                    // Player has for sure acted now, so change the TurnState
-                    *turn_state = TurnState::PlayerTurn;
-                }
-            });
-        }
+        // Change TurnState
+        // * dereferences the turn state
+        *turn_state = TurnState::PlayerTurn;
     }
 }
