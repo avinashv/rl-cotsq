@@ -42,9 +42,9 @@ running from 9 July 2024 till 27 August 2024. The event is structured to follow 
 
 </details>
 
-### Week 2
+### [Week 2](https://old.reddit.com/r/roguelikedev/comments/1e4qhsb/roguelikedev_does_the_complete_roguelike_tutorial/)
 
-Progress comment | [Milestone commit](https://github.com/avinashv/rl-cotsq/commit/d689405efaa4a4e0e579372c5e9d77839804e4e4)
+✅ [Progress comment](https://old.reddit.com/r/roguelikedev/comments/1e4qhsb/roguelikedev_does_the_complete_roguelike_tutorial/ldqor7i/) | [Milestone commit](https://github.com/avinashv/rl-cotsq/commit/d689405efaa4a4e0e579372c5e9d77839804e4e4)
 
 <details>
 <summary>16 July 2024 - The object system and generating your first map</summary>
