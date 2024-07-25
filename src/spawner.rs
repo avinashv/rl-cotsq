@@ -6,6 +6,11 @@ pub fn spawn_player(ecs: &mut World, pos: Point) {
     ecs.push((
         Player, // Player tag
         pos,    // Position component (Point)
+        Health {
+            // Health component
+            current: 20,
+            max: 20,
+        },
         Render {
             // Render component
             color: ColorPair::new(RGBA::from_u8(242, 240, 103, 255), BLACK),

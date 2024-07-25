@@ -40,5 +40,5 @@ pub fn map_render(#[resource] map: &Map, #[resource] camera: &Camera) {
     }
 
     // Submit the batch to the global list to process first
-    draw_batch.submit(0).expect("Draw batch error.");
+    draw_batch.submit(0).expect("Map DrawBatch error.");
 }

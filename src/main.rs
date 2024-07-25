@@ -25,6 +25,7 @@ mod prelude {
     // Global constants
     pub const TILE_WIDTH: i32 = 16;
     pub const TILE_HEIGHT: i32 = TILE_WIDTH;
+    pub const UI_HEIGHT: i32 = 4;
     pub const SCREEN_WIDTH: i32 = 80;
     pub const SCREEN_HEIGHT: i32 = 50;
     pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH / 2;
@@ -81,11 +82,11 @@ impl State {
 impl GameState for State {
     /// Game loop
     fn tick(&mut self, ctx: &mut BTerm) {
-        // Clear bg/fg contexts
-        ctx.set_active_console(0);
-        ctx.cls();
-        ctx.set_active_console(1);
-        ctx.cls();
+        // Clear bg/fg/ui contexts
+        for l in 0..=2 {
+            ctx.set_active_console(l);
+            ctx.cls();
+        }
 
         // Inject keyboard state as a resource into the ECS
         self.resources.insert(ctx.key);
@@ -114,12 +115,15 @@ fn main() -> BError {
     let ctx = BTermBuilder::new()
         .with_title("Caverns of the Shadow Queen")
         .with_fps_cap(30.0)
-        .with_dimensions(DISPLAY_WIDTH, DISPLAY_HEIGHT)
+        .with_dimensions(SCREEN_WIDTH, SCREEN_HEIGHT)
         .with_tile_dimensions(TILE_WIDTH, TILE_HEIGHT)
         .with_resource_path("res/")
+        // Fonts
         .with_font(DUNGEON_FONT, TILE_WIDTH, TILE_HEIGHT)
-        .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, DUNGEON_FONT)
-        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, DUNGEON_FONT)
+        // Layers, 0 indexed
+        .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, DUNGEON_FONT) // 0 - Map layer
+        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, DUNGEON_FONT) // 1 - Entity layer
+        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, DUNGEON_FONT) // 2 - UI layer
         .build()?;
 
     main_loop(ctx, State::new())

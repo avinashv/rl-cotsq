@@ -15,11 +15,18 @@ pub fn entity_render(ecs: &SubWorld, #[resource] camera: &Camera) {
     <(&Point, &Render)>::query()
         .iter(ecs)
         .for_each(|(pos, render)| {
-            // Iterate through each and add them to the draw batch
-            // * dereferences the position
-            draw_batch.set(*pos - offset, render.color, render.glyph);
+            let new_pos = *pos - offset;
+            // Ensure the entities are within the viewport
+            if new_pos.x > 0
+                && new_pos.x < DISPLAY_WIDTH
+                && new_pos.y > 0
+                && new_pos.y < (DISPLAY_HEIGHT - UI_HEIGHT)
+            {
+                // Iterate through each and add them to the draw batch
+                draw_batch.set(new_pos, render.color, render.glyph);
+            }
         });
 
     // Submit the batch to the global list to process late
-    draw_batch.submit(5000).expect("Batch error");
+    draw_batch.submit(5000).expect("Entity DrawBatch error");
 }
