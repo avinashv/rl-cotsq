@@ -32,3 +32,7 @@ pub struct Health {
     pub current: i32,
     pub max: i32,
 }
+
+/// Name component
+#[derive(Clone, PartialEq)]
+pub struct Name(pub String);

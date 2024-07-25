@@ -1,40 +1,61 @@
 use crate::prelude::*;
 
-/// Spawn player to the given position
+// Create a Player entity in the ECS
 pub fn spawn_player(ecs: &mut World, pos: Point) {
-    // Create a new Player entity
+    // Player has tags Player, Point, Render
     ecs.push((
-        Player, // Player tag
-        pos,    // Position component (Point)
-        Health {
-            // Health component
-            current: 20,
-            max: 20,
-        },
+        Player,
+        pos,
         Render {
-            // Render component
             color: ColorPair::new(RGBA::from_u8(242, 240, 103, 255), BLACK),
             glyph: to_cp437('@'),
         },
+        Health {
+            current: 20,
+            max: 20,
+        },
+        Name("Player".to_string()),
     ));
 }
 
-/// Spawn a random monster to the given position
+// Create a Monster entity in the ECS
 pub fn spawn_monster(ecs: &mut World, rng: &mut RandomNumberGenerator, pos: Point) {
-    // Create a new monster entity
+    // Randomly choose a monster to spawn
+    let (name, glyph, color, hp) = match rng.roll_dice(1, 10) {
+        1..=8 => goblin(),
+        _ => orc(),
+    };
+
+    // Monster has tags Enemy, Point, Render
     ecs.push((
-        Enemy,          // Enemy tag
-        pos,            // Position component (Point)
-        MovingRandomly, // Random movement tag
-        Render {
-            // Render component
-            color: ColorPair::new(RGBA::from_u8(255, 85, 85, 255), BLACK),
-            glyph: match rng.range(0, 4) {
-                0 => to_cp437('E'),
-                1 => to_cp437('O'),
-                2 => to_cp437('o'),
-                _ => to_cp437('g'),
-            },
+        Enemy,
+        pos,
+        Render { color, glyph },
+        Health {
+            current: hp,
+            max: hp,
         },
+        Name(name),
+        MovingRandomly {},
     ));
+}
+
+// Spawn a goblin
+fn goblin() -> (String, FontCharType, ColorPair, i32) {
+    (
+        "Goblin".to_string(),
+        to_cp437('g'),
+        ColorPair::new(RGBA::from_u8(85, 255, 85, 255), BLACK),
+        1,
+    )
+}
+
+// Spawn an orc
+fn orc() -> (String, FontCharType, ColorPair, i32) {
+    (
+        "Orc".to_string(),
+        to_cp437('o'),
+        ColorPair::new(RGBA::from_u8(94, 222, 143, 255), BLACK),
+        2,
+    )
 }

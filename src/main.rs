@@ -91,6 +91,10 @@ impl GameState for State {
         // Inject keyboard state as a resource into the ECS
         self.resources.insert(ctx.key);
 
+        // Inject the mouse position as a resource into the ECS
+        ctx.set_active_console(0);
+        self.resources.insert(Point::from_tuple(ctx.mouse_pos()));
+
         // Execute ECS systems based on TurnState
         // Result needs to be unwrapped (Option), clone to appease borrow checker
         let current_state = self.resources.get::<TurnState>().unwrap().clone();
