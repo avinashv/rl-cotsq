@@ -26,6 +26,12 @@ pub struct WantsToMove {
     pub destination: Point,
 }
 
+// WantsToAttack component (intent)
+pub struct WantsToAttack {
+    pub source: Entity,
+    pub target: Entity,
+}
+
 /// Health component
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Health {
