@@ -11,7 +11,7 @@ Built using Rust, `bracket-lib`, `legion`, and _Hands-on Rust_ by Herbert Wolver
 	- [Week 1](#week-1) ✅
 	- [Week 2](#week-2) ✅
 	- [Week 3](#week-3)
-	- [Week 4](#week-4)
+	- [Week 4](#week-4) ✅
 	- [Week 5](#week-5)
 	- [Week 6](#week-6)
 	- [Week 7](#week-7)
@@ -59,23 +59,31 @@ running from 9 July 2024 till 27 August 2024. The event is structured to follow 
 
 ### Week 3
 
+✅ [Progress comment]() | [Milestone commit](https://github.com/avinashv/rl-cotsq/commit/dea1fcddfaa28f97d5a3d468df2c1d62723c31d0)
+
 <details>
 <summary>23 July 2024 - Field of view, placing enemies, and attacking</summary>
 
- - FOV is implemented very late in this book.
+ - FOV is implemented very late in this book, so I will leave that till the end.
  - The ECS system shines in this simple situation--enemies are just defined and placed and all the tying together of rendering is already done.
  - Again, I just get the feeling there is a lot of refactoring that is going to be done later and typing all of this redundant code feels like busy-work when I know there is going to be some instruction like, "delete it".
  - I like the way state is managed, and a different system scheduler for each state is very interesting.
    - Once it is refactored into an intent-based system, **there is a bug**. `build_monster_scheduler()` doesn't call `collisions::collisions_system()` after the `movement::movement_system()` is called (as it is in the player's scheduler) and if you wait the monsters will eventually randomly find themselves on the player and in that move itself they should be destroyed. Currently they just sit on the player until a movement from the player is processed--and that movement has to be "wait".
+   - This gets refactored out entirely as this entire system gets removed.
 
 </details>
 
 ### Week 4
 
+✅ Progress comment (TBD) | [Milestone commit](https://github.com/avinashv/rl-cotsq/commit/dea1fcddfaa28f97d5a3d468df2c1d62723c31d0)
+
 <details>
 <summary>30 July 2024 - Combat damage and building the interface</summary>
 
-TBC
+ - Doing everything here in [Week 3](#week-3).
+ - The UI implementation in the book doesn't work for me. I've currently laid it out a bit more like a traditional roguelike with the pane along the bottom.
+   - I also don't like the tooltip on mouse hover. I've currently got that showing in the pane as well.
+ - Another week, another refactor. This time the deletion of `collisions.rs`. I am happy to see the intents system that was implemented with `WantsToMove` be reimplemented with `WantsToAttack`. This consistency is great.
 
 </details>
 
@@ -140,8 +148,8 @@ TBD.
 - [x] Player can walk around
 - [x] Create a basic procedural dungeon map
 - [ ] Player has field-of-view
-- [ ] Spawn monsters
-- [ ] Players can fight monsters
+- [x] Spawn monsters
+- [x] Players can fight monsters
 - [ ] Add items and inventory
 - [ ] Add a win condition
 - [ ] Game over when the player dies
