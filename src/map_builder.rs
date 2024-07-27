@@ -7,6 +7,7 @@ pub struct MapBuilder {
     pub map: Map,
     pub rooms: Vec<Rect>,
     pub player_start: Point,
+    pub amulet_start: Point,
 }
 
 impl MapBuilder {
@@ -17,12 +18,40 @@ impl MapBuilder {
             map: Map::new(),
             rooms: Vec::new(),
             player_start: Point::zero(),
+            amulet_start: Point::zero(),
         };
 
         mb.fill(TileType::Wall); // Fill with walls first
         mb.build_random_rooms(rng); // Build random rooms
         mb.build_corridors(rng); // Connect rooms with corridors
         mb.player_start = mb.rooms[0].center(); // Player starts in the center of the first room
+
+        // Create a dijkstra map using the player's start (map start)
+        let dijkstra_map = DijkstraMap::new(
+            SCREEN_WIDTH,
+            SCREEN_HEIGHT,
+            &vec![mb.map.point2d_to_index(mb.player_start)],
+            &mb.map,
+            1024.0,
+        );
+
+        // Make a large number and use this to flag unreachable tiles in the dijkstra map
+        const UNREACHABLE: &f32 = &f32::MAX;
+
+        // Wrap logic directly to the index of the amulet
+        mb.amulet_start = mb.map.index_to_point2d(
+            dijkstra_map
+                .map
+                .iter()
+                // Enum adds an index to each entry, returning tuple (index, distance)
+                .enumerate()
+                // Remove any tiles that are unreachable
+                .filter(|(_, dist)| *dist < UNREACHABLE)
+                // Look for the most distant tile
+                .max_by(|a, b| a.1.partial_cmp(b.1).unwrap()) // unwrap because partial_cmp returns an option
+                .unwrap() // unwrap because max_by returns an option
+                .0, // tuple has tile index and distance, we don't need distance
+        );
 
         mb
     }

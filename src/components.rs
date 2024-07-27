@@ -15,6 +15,14 @@ pub struct Player;
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Enemy;
 
+/// Item component (tag)
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Item;
+
+/// Amulet of Yala component (tag)
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct AmuletOfYala;
+
 /// Moving Randomly component (tag)
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct MovingRandomly;

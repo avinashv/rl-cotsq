@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-// Create a Player entity in the ECS
+/// Create a Player entity in the ECS
 pub fn spawn_player(ecs: &mut World, pos: Point) {
     // Player has tags Player, Point, Render
     ecs.push((
@@ -18,7 +18,7 @@ pub fn spawn_player(ecs: &mut World, pos: Point) {
     ));
 }
 
-// Create a Monster entity in the ECS
+/// Create a Monster entity in the ECS
 pub fn spawn_monster(ecs: &mut World, rng: &mut RandomNumberGenerator, pos: Point) {
     // Randomly choose a monster to spawn
     let (name, glyph, color, hp) = match rng.roll_dice(1, 10) {
@@ -40,7 +40,7 @@ pub fn spawn_monster(ecs: &mut World, rng: &mut RandomNumberGenerator, pos: Poin
     ));
 }
 
-// Spawn a goblin
+/// Spawn a goblin
 fn goblin() -> (String, FontCharType, ColorPair, i32) {
     (
         "Goblin".to_string(),
@@ -50,7 +50,7 @@ fn goblin() -> (String, FontCharType, ColorPair, i32) {
     )
 }
 
-// Spawn an orc
+/// Spawn an orc
 fn orc() -> (String, FontCharType, ColorPair, i32) {
     (
         "Orc".to_string(),
@@ -58,4 +58,18 @@ fn orc() -> (String, FontCharType, ColorPair, i32) {
         ColorPair::new(RGBA::from_u8(94, 222, 143, 255), BLACK),
         2,
     )
+}
+
+// Create the Amulet of Yala entity in the ECS
+pub fn spawn_amulet_of_yala(ecs: &mut World, pos: Point) {
+    ecs.push((
+        Item,
+        AmuletOfYala,
+        pos,
+        Render {
+            color: ColorPair::new(RGBA::from_u8(255, 85, 255, 255), BLACK),
+            glyph: to_cp437('|'),
+        },
+        Name("Amulet of Yala".to_string()),
+    ));
 }
