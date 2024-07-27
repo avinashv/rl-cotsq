@@ -77,6 +77,41 @@ impl State {
             monster_systems: build_monster_scheduler(),
         }
     }
+
+    /// Game Over state
+    fn game_over(&mut self, ctx: &mut BTerm) {
+        // Switch to the UI layer
+        ctx.set_active_console(2);
+
+        // Print the Game Over message
+        ctx.print_color_centered(2, RED, BLACK, "Your quest has ended.");
+        ctx.print_color_centered(4, WHITE, BLACK, "You were slain by a monster.");
+        ctx.print_color_centered(5, WHITE, BLACK, "The Amulet of Yala remains unclaimed.");
+        ctx.print_color_centered(8, YELLOW, BLACK, "Try again with a new hero.");
+        ctx.print_color_centered(9, GREEN, BLACK, "Press Space to play again.");
+
+        // Check if the player pressed Space
+        if let Some(VirtualKeyCode::Space) = ctx.key {
+            // Create a new game World and reset the state
+            self.ecs = World::default();
+            self.resources = Resources::default();
+            let mut rng = RandomNumberGenerator::new();
+            let map_builder = MapBuilder::new(&mut rng);
+            spawn_player(&mut self.ecs, map_builder.player_start);
+            map_builder
+                .rooms
+                .iter()
+                .skip(1)
+                .map(|r| r.center())
+                .for_each(|pos| spawn_monster(&mut self.ecs, &mut rng, pos));
+            self.resources.insert(map_builder.map);
+            self.resources.insert(rng);
+            self.resources.insert(Camera::new(map_builder.player_start));
+
+            // Reset the TurnState to AwaitingInput
+            self.resources.insert(TurnState::AwaitingInput);
+        }
+    }
 }
 
 impl GameState for State {
@@ -110,6 +145,7 @@ impl GameState for State {
             TurnState::MonsterTurn => self
                 .monster_systems
                 .execute(&mut self.ecs, &mut self.resources),
+            TurnState::GameOver => self.game_over(ctx),
         }
 
         // Render draw buffer

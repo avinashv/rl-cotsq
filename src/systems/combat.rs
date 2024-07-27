@@ -15,32 +15,30 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
         .collect();
 
     // Process combat for each target
-    targets
-        .iter()
-        .for_each(|(message, target)| {
-            // Get the player entity
-            let is_player = ecs
-                .entry_ref(*target)
-                .unwrap()
-                .get_component::<Player>()
-                .is_ok();
+    targets.iter().for_each(|(message, target)| {
+        // Get the player entity
+        let is_player = ecs
+            .entry_ref(*target)
+            .unwrap()
+            .get_component::<Player>()
+            .is_ok();
 
-            // Target must have health to be in combat
-            if let Ok(health) = ecs // Clippy doesn't want this mutable
-                .entry_mut(*target)
-                .unwrap()
-                .get_component_mut::<Health>()
-            {
-                // Target takes damage
-                health.current -= 1;
+        // Target must have health to be in combat
+        if let Ok(health) = ecs // Clippy doesn't want this mutable
+            .entry_mut(*target)
+            .unwrap()
+            .get_component_mut::<Health>()
+        {
+            // Target takes damage
+            health.current -= 1;
 
-                // If the target doesn't have health and is *not* the player, remove it
-                if health.current < 1 && !is_player {
-                    commands.remove(*target);
-                }
+            // If the target doesn't have health and is *not* the player, remove it
+            if health.current < 1 && !is_player {
+                commands.remove(*target);
             }
+        }
 
-            // Remove WantsToAttack intent message
-            commands.remove(*message);
-        });
+        // Remove WantsToAttack intent message
+        commands.remove(*message);
+    });
 }
