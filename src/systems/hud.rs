@@ -23,7 +23,7 @@ pub fn hud(health: &Health, _player: &Player, _ecs: &SubWorld) {
     draw_batch.print_color(
         Point::new(0, DISPLAY_HEIGHT - UI_HEIGHT + 1),
         format!("HP {}/{} ", health.current, health.max),
-        ColorPair::new(WHITE, RED),
+        ColorPair::new(WHITE, BLACK),
     );
 
     draw_batch.submit(10000).expect("UI DrawBatch Error.");

@@ -83,10 +83,12 @@ impl GameState for State {
     /// Game loop
     fn tick(&mut self, ctx: &mut BTerm) {
         // Clear bg/fg/ui contexts
-        for l in 0..=2 {
-            ctx.set_active_console(l);
-            ctx.cls();
-        }
+        ctx.set_active_console(0);
+        ctx.cls();
+        ctx.set_active_console(1);
+        ctx.cls();
+        ctx.set_active_console(2);
+        ctx.cls_bg(RGBA::from_u8(0, 0, 0, 0));
 
         // Inject keyboard state as a resource into the ECS
         self.resources.insert(ctx.key);
@@ -127,7 +129,7 @@ fn main() -> BError {
         // Layers, 0 indexed
         .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, DUNGEON_FONT) // 0 - Map layer
         .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, DUNGEON_FONT) // 1 - Entity layer
-        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, DUNGEON_FONT) // 2 - UI layer
+        .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, DUNGEON_FONT) // 2 - UI layer
         .build()?;
 
     main_loop(ctx, State::new())
