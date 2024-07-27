@@ -81,6 +81,54 @@ impl State {
         }
     }
 
+    /// Reset the game state cleanly
+    fn reset_game_state(&mut self) {
+        // Set up ECS
+        self.ecs = World::default();
+        self.resources = Resources::default();
+
+        // Set up RNG and map builder
+        let mut rng = RandomNumberGenerator::new();
+        let map_builder = MapBuilder::new(&mut rng);
+
+        // Spawn entities
+        spawn_player(&mut self.ecs, map_builder.player_start);
+        spawn_amulet_of_yala(&mut self.ecs, map_builder.amulet_start);
+
+        // Build map
+        map_builder
+            .rooms
+            .iter()
+            .skip(1)
+            .map(|r| r.center())
+            .for_each(|pos| spawn_monster(&mut self.ecs, &mut rng, pos));
+
+        // Inject map, rng, camera, turn state as a Resource
+        self.resources.insert(rng);
+        self.resources.insert(map_builder.map);
+        self.resources.insert(Camera::new(map_builder.player_start));
+        self.resources.insert(TurnState::AwaitingInput);
+    }
+
+    /// Victory state
+    fn victory(&mut self, ctx: &mut BTerm) {
+        // Switch to the UI layer
+        ctx.set_active_console(2);
+
+        // Print the Victory message
+        ctx.print_color_centered(2, RED, BLACK, "You have won!.");
+        ctx.print_color_centered(4, WHITE, BLACK, "You put on the Amulet of Yala.");
+        ctx.print_color_centered(5, WHITE, BLACK, "You feel it's power. You save your town.");
+        ctx.print_color_centered(8, YELLOW, BLACK, "Try again with a new hero.");
+        ctx.print_color_centered(9, GREEN, BLACK, "Press Space to play again.");
+
+        // Check if the player pressed Space
+        if let Some(VirtualKeyCode::Space) = ctx.key {
+            // Reset the game state
+            self.reset_game_state();
+        }
+    }
+
     /// Game Over state
     fn game_over(&mut self, ctx: &mut BTerm) {
         // Switch to the UI layer
@@ -95,24 +143,8 @@ impl State {
 
         // Check if the player pressed Space
         if let Some(VirtualKeyCode::Space) = ctx.key {
-            // Create a new game World and reset the state
-            self.ecs = World::default();
-            self.resources = Resources::default();
-            let mut rng = RandomNumberGenerator::new();
-            let map_builder = MapBuilder::new(&mut rng);
-            spawn_player(&mut self.ecs, map_builder.player_start);
-            map_builder
-                .rooms
-                .iter()
-                .skip(1)
-                .map(|r| r.center())
-                .for_each(|pos| spawn_monster(&mut self.ecs, &mut rng, pos));
-            self.resources.insert(map_builder.map);
-            self.resources.insert(rng);
-            self.resources.insert(Camera::new(map_builder.player_start));
-
-            // Reset the TurnState to AwaitingInput
-            self.resources.insert(TurnState::AwaitingInput);
+            // Reset the game state
+            self.reset_game_state();
         }
     }
 }
@@ -149,6 +181,7 @@ impl GameState for State {
                 .monster_systems
                 .execute(&mut self.ecs, &mut self.resources),
             TurnState::GameOver => self.game_over(ctx),
+            TurnState::Victory => self.victory(ctx),
         }
 
         // Render draw buffer
