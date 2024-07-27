@@ -24,12 +24,6 @@ pub fn player_input(
             VirtualKeyCode::Up | VirtualKeyCode::K | VirtualKeyCode::W => Point::new(0, -1),
             VirtualKeyCode::Down | VirtualKeyCode::J | VirtualKeyCode::S => Point::new(0, 1),
 
-            // Diagonal directors (vi and wasd keys)
-            VirtualKeyCode::Y | VirtualKeyCode::Q => Point::new(-1, -1),
-            VirtualKeyCode::U | VirtualKeyCode::E => Point::new(1, -1),
-            VirtualKeyCode::N | VirtualKeyCode::C => Point::new(1, 1),
-            VirtualKeyCode::B | VirtualKeyCode::Z => Point::new(-1, 1),
-
             // No key pressed
             _ => Point::zero(),
         };
@@ -54,9 +48,7 @@ pub fn player_input(
             // Check if there are enemies on the destination tile
             enemies
                 .iter(ecs)
-                .filter(|(_, pos)| {
-                    **pos == destination
-                })
+                .filter(|(_, pos)| **pos == destination)
                 .for_each(|(entity, _)| {
                     // Targeting an enemy on destination, so initiate combat
                     hit_something = true;
@@ -65,14 +57,13 @@ pub fn player_input(
                     did_something = true;
 
                     // Create an attack in ECS
-                    commands
-                        .push((
-                            (),
-                            WantsToAttack {
-                                source: player_entity,
-                                target: *entity,
-                            }
-                        ));
+                    commands.push((
+                        (),
+                        WantsToAttack {
+                            source: player_entity,
+                            target: *entity,
+                        },
+                    ));
                 });
 
             // No attack, so create a movement in ECS
@@ -80,14 +71,13 @@ pub fn player_input(
                 // Moving is doing something
                 did_something = true;
 
-                commands
-                    .push((
-                        (),
-                        WantsToMove {
-                            entity: player_entity,
-                            destination
-                        }
-                    ));
+                commands.push((
+                    (),
+                    WantsToMove {
+                        entity: player_entity,
+                        destination,
+                    },
+                ));
             }
         }
 
@@ -96,7 +86,8 @@ pub fn player_input(
             if let Ok(mut health) = ecs
                 .entry_mut(player_entity)
                 .unwrap()
-                .get_component_mut::<Health>() {
+                .get_component_mut::<Health>()
+            {
                 // Grant 1 hp back
                 health.current = i32::min(health.max, health.current + 1);
             }

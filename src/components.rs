@@ -19,6 +19,10 @@ pub struct Enemy;
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct MovingRandomly;
 
+/// ChasingPlayer component (tag)
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ChasingPlayer;
+
 /// WantsToMove component (intent)
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct WantsToMove {
