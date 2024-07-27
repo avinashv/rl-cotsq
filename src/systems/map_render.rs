@@ -1,7 +1,12 @@
 use crate::prelude::*;
 
-#[system]
-pub fn map_render(#[resource] map: &Map, #[resource] camera: &Camera) {
+#[system(for_each)]
+pub fn map_render(
+    fov: &FieldOfView,
+    _player: &Player,
+    #[resource] map: &Map,
+    #[resource] camera: &Camera,
+) {
     // Start a new batch draw to the background layer
     let mut draw_batch = DrawBatch::new();
     draw_batch.target(0);
@@ -13,8 +18,8 @@ pub fn map_render(#[resource] map: &Map, #[resource] camera: &Camera) {
             let pt = Point::new(x, y);
             let offset = Point::new(camera.left_x, camera.top_y);
 
-            // Is it a valid point?
-            if map.in_bounds(pt) {
+            // Is it a valid point? Is it currently visible?
+            if map.in_bounds(pt) && fov.visible_tiles.contains(&pt) {
                 // Determine the index
                 let idx = map_idx(x, y);
 
@@ -28,11 +33,7 @@ pub fn map_render(#[resource] map: &Map, #[resource] camera: &Camera) {
                         );
                     }
                     TileType::Wall => {
-                        draw_batch.set(
-                            pt - offset,
-                            ColorPair::new(RGBA::from_u8(187, 187, 187, 255), BLACK),
-                            to_cp437('#'),
-                        );
+                        draw_batch.set(pt - offset, ColorPair::new(WHITE, BLACK), to_cp437('#'));
                     }
                 }
             }

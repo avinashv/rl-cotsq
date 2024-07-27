@@ -1,10 +1,39 @@
 pub use crate::prelude::*;
+use std::collections::HashSet;
 
 /// Render component
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Render {
     pub color: ColorPair,    // FG/BG render color
     pub glyph: FontCharType, // CP437 render glyph
+}
+
+/// Field of View component
+#[derive(Clone, Debug, PartialEq)]
+pub struct FieldOfView {
+    pub visible_tiles: HashSet<Point>, // Tiles visible to the entity
+    pub radius: i32,                   // Field of view range
+    pub is_dirty: bool,                // Dirty FoV needs updating
+}
+
+impl FieldOfView {
+    /// Initialize a new field of view
+    pub fn new(radius: i32) -> Self {
+        Self {
+            visible_tiles: HashSet::new(),
+            radius,
+            is_dirty: true, // process the fov on creation
+        }
+    }
+
+    /// Create a perfect copy of the field of view set to dirty
+    pub fn clone_dirty(&self) -> Self {
+        Self {
+            visible_tiles: HashSet::new(),
+            radius: self.radius,
+            is_dirty: true,
+        }
+    }
 }
 
 /// Player component (tag)
@@ -27,7 +56,7 @@ pub struct AmuletOfYala;
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct MovingRandomly;
 
-/// ChasingPlayer component (tag)
+/// Chasing Player component (tag)
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct ChasingPlayer;
 

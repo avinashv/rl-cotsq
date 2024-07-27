@@ -15,6 +15,7 @@ pub fn spawn_player(ecs: &mut World, pos: Point) {
             max: 10,
         },
         Name("Player".to_string()),
+        FieldOfView::new(8),
     ));
 }
 
@@ -37,6 +38,7 @@ pub fn spawn_monster(ecs: &mut World, rng: &mut RandomNumberGenerator, pos: Poin
         },
         Name(name),
         ChasingPlayer,
+        FieldOfView::new(6),
     ));
 }
 

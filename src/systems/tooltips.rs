@@ -4,9 +4,15 @@ use crate::prelude::*;
 #[read_component(Point)]
 #[read_component(Name)]
 #[read_component(Health)]
+#[read_component(FieldOfView)]
+#[read_component(Player)]
 pub fn tooltips(ecs: &SubWorld, #[resource] mouse_pos: &Point, #[resource] camera: &Camera) {
     // Get all positions where there is an entity with a name
     let mut positions = <(Entity, &Point, &Name)>::query();
+
+    // Get player's fov system
+    let mut fov = <&FieldOfView>::query().filter(component::<Player>());
+    let player_fov = fov.iter(ecs).nth(0).unwrap();
 
     // Get Map position with Camera offset
     let offset = Point::new(camera.left_x, camera.top_y);
@@ -20,7 +26,9 @@ pub fn tooltips(ecs: &SubWorld, #[resource] mouse_pos: &Point, #[resource] camer
     positions
         .iter(ecs)
         // Filter those positions which are within the map viewport that the mouse is over
-        .filter(|(_, pos, _)| **pos == map_pos && pos.y <= camera.bottom_y)
+        .filter(|(_, pos, _)| {
+            **pos == map_pos && pos.y <= camera.bottom_y && player_fov.visible_tiles.contains(&pos)
+        })
         .for_each(|(entity, _, name)| {
             let display =
                 if let Ok(health) = ecs.entry_ref(*entity).unwrap().get_component::<Health>() {
