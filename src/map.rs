@@ -17,6 +17,7 @@ pub enum TileType {
 /// Map structure made up of a list of TileTypes.
 pub struct Map {
     pub tiles: Vec<TileType>,
+    pub revealed_tiles: Vec<bool>,
 }
 
 impl Map {
@@ -25,6 +26,7 @@ impl Map {
         Self {
             // Single-dimensioned vector of floor tiles.
             tiles: vec![TileType::Floor; NUM_TILES],
+            revealed_tiles: vec![false; NUM_TILES],
         }
     }
 

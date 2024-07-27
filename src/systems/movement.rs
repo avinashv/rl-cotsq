@@ -6,7 +6,7 @@ use crate::prelude::*;
 pub fn movement(
     entity: &Entity,
     want_move: &WantsToMove,
-    #[resource] map: &Map,
+    #[resource] map: &mut Map,
     #[resource] camera: &mut Camera,
     ecs: &SubWorld,
     commands: &mut CommandBuffer,
@@ -22,12 +22,17 @@ pub fn movement(
             if let Ok(fov) = entry.get_component::<FieldOfView>() {
                 // Then replace the visible set with a clone with the dirty flag
                 commands.add_component(want_move.entity, fov.clone_dirty());
-            }
 
-            // Is this the player?
-            if entry.get_component::<Player>().is_ok() {
-                // Then process camera movement
-                camera.on_player_move(want_move.destination);
+                // Is this the player?
+                if entry.get_component::<Player>().is_ok() {
+                    // Then process camera movement
+                    camera.on_player_move(want_move.destination);
+
+                    // Track revealed tiles
+                    fov.visible_tiles.iter().for_each(|pos| {
+                        map.revealed_tiles[map_idx(pos.x, pos.y)] = true;
+                    });
+                }
             }
         }
     }
