@@ -10,7 +10,7 @@ Built using Rust, `bracket-lib`, `legion`, and _Hands-on Rust_ by Herbert Wolver
 - Weekly Implementation Notes
 	- [Week 1](#week-1) ✅
 	- [Week 2](#week-2) ✅
-	- [Week 3](#week-3)
+	- [Week 3](#week-3) ✅
 	- [Week 4](#week-4) ✅
 	- [Week 5](#week-5)
 	- [Week 6](#week-6)
@@ -59,12 +59,14 @@ running from 9 July 2024 till 27 August 2024. The event is structured to follow 
 
 ### Week 3
 
-✅ [Progress comment]() | [Milestone commit](https://github.com/avinashv/rl-cotsq/commit/dea1fcddfaa28f97d5a3d468df2c1d62723c31d0)
+✅ [Progress comment](https://www.reddit.com/r/roguelikedev/comments/1eacxxc/roguelikedev_does_the_complete_roguelike_tutorial/lex0z4l/) | [Milestone commit](https://github.com/avinashv/rl-cotsq/commit/802957d5a91ca4398caf79f97840bf9b78971468)
 
 <details>
 <summary>23 July 2024 - Field of view, placing enemies, and attacking</summary>
 
  - FOV is implemented very late in this book, so I will leave that till the end.
+   - I have enjoyed the implementation of FoV. I have definitely made changes to the systems presented in the book. Legion has a lovely `#[system(for_each)]` for querying automatically and I have used that in, for example, `fov.rs` which is now just a simple implementation compared to the book's quite complicated `iter` query.
+   - I also don't really like the handling of monster AI in the book. I have instead kept the `MovingRandomly` system alive, and it has a breakout for if the player is visible, after which `ChasingPlayer` is active. The benefit of this is that if the player has, for example, stealth or invisibility, the monsters still behave in a reasonable manner, and don't just stand there. 
  - The ECS system shines in this simple situation--enemies are just defined and placed and all the tying together of rendering is already done.
  - Again, I just get the feeling there is a lot of refactoring that is going to be done later and typing all of this redundant code feels like busy-work when I know there is going to be some instruction like, "delete it".
  - I like the way state is managed, and a different system scheduler for each state is very interesting.
