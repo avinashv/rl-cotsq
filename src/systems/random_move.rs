@@ -3,6 +3,7 @@ use crate::prelude::*;
 #[system]
 #[read_component(Point)]
 #[read_component(MovingRandomly)]
+#[read_component(FieldOfView)]
 #[read_component(Health)]
 #[read_component(Player)]
 pub fn random_move(
@@ -11,13 +12,22 @@ pub fn random_move(
     commands: &mut CommandBuffer,
 ) {
     // Get all entities with the MovingRandomly tag
-    let mut movers = <(Entity, &Point, &MovingRandomly)>::query();
+    let mut movers = <(Entity, &Point, &MovingRandomly, &FieldOfView)>::query();
 
     // Get all entities with the Health tag
     let mut positions = <(Entity, &Point, &Health)>::query();
 
+    // Get the player position to check if its visible in FOV
+    let mut player = <(&Point, &Player)>::query();
+    let player_pos = player.iter(ecs).nth(0).unwrap().0; // 0 is &Point
+
     // Iterate over the results
-    movers.iter(ecs).for_each(|(entity, pos, _)| {
+    movers.iter(ecs).for_each(|(entity, pos, _, fov)| {
+        // If the monster can see the player, stop moving randomly
+        if fov.visible_tiles.contains(&player_pos) {
+            return;
+        }
+
         // Choose an orthogonal direction randomly
         let destination = match rng.range(0, 4) {
             0 => Point::new(-1, 0),
