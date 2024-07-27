@@ -83,7 +83,7 @@ pub fn player_input(
 
         // If the player did nothing
         if !did_something {
-            if let Ok(mut health) = ecs
+            if let Ok(health) = ecs // Clippy doesn't want this mutable
                 .entry_mut(player_entity)
                 .unwrap()
                 .get_component_mut::<Health>()

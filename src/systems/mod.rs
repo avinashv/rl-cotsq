@@ -1,5 +1,6 @@
 use crate::prelude::*;
 
+mod chasing;
 mod combat;
 mod end_turn;
 mod entity_render;
@@ -43,6 +44,7 @@ pub fn build_monster_scheduler() -> Schedule {
     // MonsterTurn - movement, collisions, render, end turn
     Schedule::builder()
         .add_system(random_move::random_move_system())
+        .add_system(chasing::chasing_system())
         .flush() // Force above systems to complete
         .add_system(combat::combat_system())
         .flush() // Force above systems to complete
