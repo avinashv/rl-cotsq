@@ -39,8 +39,8 @@ pub fn tooltips(ecs: &SubWorld, #[resource] mouse_pos: &Point, #[resource] camer
                     name.0.clone()
                 };
 
-            // Print at the bottom of the UI
-            draw_batch.print(Point::new(0, DISPLAY_HEIGHT - (UI_HEIGHT - 2)), &display);
+            // Print on the UI, right-aligned
+            draw_batch.print_right(Point::new(DISPLAY_WIDTH, DISPLAY_HEIGHT - (UI_HEIGHT - 1)), &display);
         });
 
     // Submit the batch to the global list to process quite late
