@@ -167,7 +167,7 @@ TBD.
 - [x] Monsters have field-of-view
 - [ ] Messaging log
 - [ ] Entities have a basic finite state machine
-- [ ] Add more interesting dungeon designs
+- [x] Add more interesting dungeon designs
 - [ ] Add dungeon themes
 - [ ] Add multiple dungeon levels
 - [ ] Add weapons

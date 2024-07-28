@@ -1,9 +1,13 @@
 use crate::prelude::*;
 
-mod empty;
+// mod empty;
+mod automata;
+mod drunken;
 mod rooms;
 
 // use empty::EmptyArchitect;
+use automata::CellularAutomataArchitect;
+use drunken::DrunkenWalkArchitect;
 use rooms::RoomsArchitect;
 
 const NUM_ROOMS: usize = 20;
@@ -23,9 +27,16 @@ pub struct MapBuilder {
 
 impl MapBuilder {
     pub fn new(rng: &mut RandomNumberGenerator) -> Self {
-        let mut architect = RoomsArchitect {};
-        // let mut architect = EmptyArchitect {};
-        architect.new(rng)
+        // Randomly select an architect
+        let mut architect: Box<dyn MapArchitect> = match rng.range(0, 3) {
+            0 => Box::new(DrunkenWalkArchitect {}),
+            1 => Box::new(CellularAutomataArchitect {}),
+            _ => Box::new(RoomsArchitect {}),
+        };
+
+        // Create the map builder and return it
+        let mb = architect.new(rng);
+        mb
     }
 
     /// Fill a map entirely with the chosen TileType
@@ -157,5 +168,41 @@ impl MapBuilder {
                 self.apply_horizontal_tunnel(prev.x, new.x, new.y);
             }
         }
+    }
+
+    // Spawn monsters in open spaces not too near the player
+    fn spawn_monsters(&self, start: &Point, rng: &mut RandomNumberGenerator) -> Vec<Point> {
+        // Max number of monsters to spawn
+        const NUM_MONSTERS: usize = 50;
+
+        let mut spawnable_tiles: Vec<Point> = self
+            .map
+            .tiles
+            .iter()
+            // Add the index to the tiletype
+            .enumerate()
+            // Filter only tiles that are a floor and more than 10 tiles from the player
+            .filter(|(idx, t)| {
+                **t == TileType::Floor
+                    && DistanceAlg::Pythagoras.distance2d(*start, self.map.index_to_point2d(*idx))
+                        > 10.0
+            })
+            .map(|(idx, _)| self.map.index_to_point2d(idx))
+            .collect();
+
+        //
+        let mut spawns = Vec::new();
+        for _ in 0..NUM_MONSTERS {
+            // Randomly choose a point from the vector of spawnable tiles
+            let target_index = rng.random_slice_index(&spawnable_tiles).unwrap();
+
+            // Add the tile to the list of spawns
+            spawns.push(spawnable_tiles[target_index].clone());
+
+            // Remove it from the list of potential spawns to prevent double-counting
+            spawnable_tiles.remove(target_index);
+        }
+
+        spawns
     }
 }
