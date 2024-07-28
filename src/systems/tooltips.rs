@@ -40,7 +40,10 @@ pub fn tooltips(ecs: &SubWorld, #[resource] mouse_pos: &Point, #[resource] camer
                 };
 
             // Print on the UI, right-aligned
-            draw_batch.print_right(Point::new(DISPLAY_WIDTH, DISPLAY_HEIGHT - (UI_HEIGHT - 1)), &display);
+            draw_batch.print_right(
+                Point::new(DISPLAY_WIDTH, DISPLAY_HEIGHT - (UI_HEIGHT - 1)),
+                &display,
+            );
         });
 
     // Submit the batch to the global list to process quite late

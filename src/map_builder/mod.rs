@@ -1,37 +1,48 @@
 use crate::prelude::*;
 
+mod empty;
+mod rooms;
+
+// use empty::EmptyArchitect;
+use rooms::RoomsArchitect;
+
 const NUM_ROOMS: usize = 20;
+
+trait MapArchitect {
+    fn new(&mut self, rng: &mut RandomNumberGenerator) -> MapBuilder;
+}
 
 /// Builder structure to hold its map, rooms, and player start.
 pub struct MapBuilder {
     pub map: Map,
     pub rooms: Vec<Rect>,
+    pub monster_spawns: Vec<Point>,
     pub player_start: Point,
     pub amulet_start: Point,
 }
 
 impl MapBuilder {
-    /// Constructor for a new MapBuilder
     pub fn new(rng: &mut RandomNumberGenerator) -> Self {
-        // Create a new MapBuilder instance to populate
-        let mut mb = MapBuilder {
-            map: Map::new(),
-            rooms: Vec::new(),
-            player_start: Point::zero(),
-            amulet_start: Point::zero(),
-        };
+        let mut architect = RoomsArchitect {};
+        // let mut architect = EmptyArchitect {};
+        architect.new(rng)
+    }
 
-        mb.fill(TileType::Wall); // Fill with walls first
-        mb.build_random_rooms(rng); // Build random rooms
-        mb.build_corridors(rng); // Connect rooms with corridors
-        mb.player_start = mb.rooms[0].center(); // Player starts in the center of the first room
+    /// Fill a map entirely with the chosen TileType
+    fn fill(&mut self, tile: TileType) {
+        // change each tile to a wall
+        // * needs to dereference to change the actual tile
+        self.map.tiles.iter_mut().for_each(|t| *t = tile);
+    }
 
+    /// Find the most distant tile from the player start tile
+    fn find_most_distant(&self) -> Point {
         // Create a dijkstra map using the player's start (map start)
         let dijkstra_map = DijkstraMap::new(
             SCREEN_WIDTH,
             SCREEN_HEIGHT,
-            &vec![mb.map.point2d_to_index(mb.player_start)],
-            &mb.map,
+            &vec![self.map.point2d_to_index(self.player_start)],
+            &self.map,
             1024.0,
         );
 
@@ -39,7 +50,7 @@ impl MapBuilder {
         const UNREACHABLE: &f32 = &f32::MAX;
 
         // Wrap logic directly to the index of the amulet
-        mb.amulet_start = mb.map.index_to_point2d(
+        self.map.index_to_point2d(
             dijkstra_map
                 .map
                 .iter()
@@ -49,18 +60,9 @@ impl MapBuilder {
                 .filter(|(_, dist)| *dist < UNREACHABLE)
                 // Look for the most distant tile
                 .max_by(|a, b| a.1.partial_cmp(b.1).unwrap()) // unwrap because partial_cmp returns an option
-                .unwrap() // unwrap because max_by returns an option
-                .0, // tuple has tile index and distance, we don't need distance
-        );
-
-        mb
-    }
-
-    /// Fill a map entirely with the chosen TileType
-    fn fill(&mut self, tile: TileType) {
-        // change each tile to a wall
-        // * needs to dereference to change the actual tile
-        self.map.tiles.iter_mut().for_each(|t| *t = tile);
+                .unwrap()
+                .0, // unwrap because max_by returns an option
+        )
     }
 
     /// Create rooms with random size and location if they don't overlap
@@ -88,9 +90,9 @@ impl MapBuilder {
             // If it didn't overlap
             if !overlap {
                 // Carve out each tile of the room size on the map into a Floor
-                room.for_each(|t| {
-                    if t.x > 0 && t.x < SCREEN_WIDTH && t.y > 0 && t.y < SCREEN_HEIGHT {
-                        let idx = map_idx(t.x, t.y);
+                room.for_each(|rr| {
+                    if rr.x > 0 && rr.x < SCREEN_WIDTH && rr.y > 0 && rr.y < SCREEN_HEIGHT {
+                        let idx = map_idx(rr.x, rr.y);
                         self.map.tiles[idx] = TileType::Floor;
                     }
                 });
