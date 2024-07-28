@@ -149,12 +149,12 @@ TBD.
 
 - [x] Player can walk around
 - [x] Create a basic procedural dungeon map
-- [ ] Player has field-of-view
+- [x] Player has field-of-view
 - [x] Spawn monsters
 - [x] Players can fight monsters
 - [ ] Add items and inventory
-- [ ] Add a win condition
-- [ ] Game over when the player dies
+- [x] Add a win condition
+- [x] Game over when the player dies
 
 </details>
 
@@ -164,7 +164,7 @@ TBD.
 
 - [x] Camera system
 - [ ] Bitset walls
-- [ ] Monsters have field-of-view
+- [x] Monsters have field-of-view
 - [ ] Messaging log
 - [ ] Entities have a basic finite state machine
 - [ ] Add more interesting dungeon designs
