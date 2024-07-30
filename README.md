@@ -77,7 +77,7 @@ running from 9 July 2024 till 27 August 2024. The event is structured to follow 
 
 ### Week 4
 
-✅ Progress comment (TBD) | [Milestone commit](https://github.com/avinashv/rl-cotsq/commit/dea1fcddfaa28f97d5a3d468df2c1d62723c31d0)
+✅ [Progress comment](https://www.reddit.com/r/roguelikedev/comments/1efljus/roguelikedev_does_the_complete_roguelike_tutorial/lfmtbnt/) | [Milestone commit](https://github.com/avinashv/rl-cotsq/commit/dea1fcddfaa28f97d5a3d468df2c1d62723c31d0)
 
 <details>
 <summary>30 July 2024 - Combat damage and building the interface</summary>
